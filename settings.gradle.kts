@@ -1,0 +1,1 @@
+rootProject.name = "com.adriyo.ktor-note-api"
