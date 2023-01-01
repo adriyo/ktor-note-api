@@ -14,7 +14,7 @@ fun Application.configureException() {
                 is BadRequestException -> {
                     call.respond(
                         status = HttpStatusCode.BadRequest,
-                        ApiResult(message = "Bad Request")
+                        ApiResult(message = "Gagal memproses data")
                     )
                 }
                 is UnsupportedMediaTypeException -> {

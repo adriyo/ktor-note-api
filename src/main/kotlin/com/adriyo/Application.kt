@@ -1,12 +1,10 @@
 package com.adriyo
 
-import com.adriyo.models.ApiResult
+import com.adriyo.dao.DatabaseFactory
+import com.adriyo.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.adriyo.plugins.*
-import io.ktor.server.plugins.statuspages.*
-import io.ktor.server.response.*
 
 fun main() {
     embeddedServer(Netty, port = 8080, host = "localhost", module = Application::module)
@@ -14,6 +12,7 @@ fun main() {
 }
 
 fun Application.module() {
+    DatabaseFactory.init()
     configureSerialization()
     configureHTTP()
     configureSecurity()
