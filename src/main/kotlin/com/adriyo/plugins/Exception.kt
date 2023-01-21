@@ -33,7 +33,7 @@ fun Application.configureException() {
 
                 else -> {
                     call.respond(
-                        status = HttpStatusCode.Forbidden,
+                        status = HttpStatusCode.BadRequest,
                         ApiResult(message = "${cause.message}")
                     )
                 }

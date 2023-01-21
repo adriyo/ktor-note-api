@@ -1,6 +1,6 @@
 package com.adriyo.routes
 
-import com.adriyo.dao.DatabaseFactory.dao
+import com.adriyo.dao.DatabaseFactory.daoNotes
 import com.adriyo.models.ApiResult
 import com.adriyo.models.Note
 import com.adriyo.requests.NoteRequest
@@ -14,7 +14,7 @@ import io.ktor.server.routing.*
 fun Route.noteRouting() {
     route("/notes") {
         get {
-            val notes = dao.allNotes()
+            val notes = daoNotes.allNotes()
             call.respond(notes)
         }
         get("{id?}") {
@@ -22,7 +22,7 @@ fun Route.noteRouting() {
                 status = HttpStatusCode.BadRequest,
                 ApiResult("Missing ID")
             )
-            val note: Note = dao.note(id.toInt()) ?: return@get call.respond(
+            val note: Note = daoNotes.note(id.toInt()) ?: return@get call.respond(
                 HttpStatusCode.NotFound,
                 ApiResult("Data tidak ditemukan")
             )
@@ -32,19 +32,19 @@ fun Route.noteRouting() {
             val notes =
                 call.receiveNullable<List<NoteRequest>>()
                     ?: throw BadRequestException("Tidak ada data yang dapat diproses")
-            dao.saveNotes(notes)
+            daoNotes.saveNotes(notes)
             call.respond(status = HttpStatusCode.Created, ApiResult("Notes saved"))
         }
     }
     route("/note") {
         post {
             val note = call.receive<NoteRequest>()
-            dao.save(note) ?: throw BadRequestException("Gagal menyimpan data")
+            daoNotes.save(note) ?: throw BadRequestException("Gagal menyimpan data")
             call.respond(status = HttpStatusCode.Created, ApiResult("Data berhasil disimpan"))
         }
         delete("{id?}") {
             val id = call.parameters["id"] ?: return@delete call.respond(HttpStatusCode.BadRequest)
-            val isSuccess = dao.delete(id.toInt())
+            val isSuccess = daoNotes.delete(id.toInt())
             if (isSuccess) {
                 call.respond(status = HttpStatusCode.Accepted, ApiResult("Catatan berhasil dihapus"))
             } else {
@@ -54,7 +54,7 @@ fun Route.noteRouting() {
         put {
             val note =
                 call.receiveNullable<NoteRequest>() ?: throw BadRequestException("Tidak ada data yang dapat diproses")
-            val isSuccess: Boolean = dao.update(note)
+            val isSuccess: Boolean = daoNotes.update(note)
             if (!isSuccess) throw BadRequestException("Tidak ada data yang dapat diproses")
             call.respond(status = HttpStatusCode.Created, ApiResult("Note updated"))
         }

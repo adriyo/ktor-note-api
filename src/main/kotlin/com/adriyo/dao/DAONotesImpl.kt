@@ -1,7 +1,7 @@
 package com.adriyo.dao
 
 import com.adriyo.dao.DatabaseFactory.dbQuery
-import com.adriyo.dao.entities.Notes
+import com.adriyo.dao.tables.Notes
 import com.adriyo.models.Note
 import com.adriyo.requests.NoteRequest
 import org.jetbrains.exposed.sql.*
@@ -53,7 +53,7 @@ class DAONotesImpl : DAONotes {
     }
 
     private fun resultRowToNote(row: ResultRow) = Note(
-        id = row[Notes.id],
+        id = row[Notes.id].value,
         title = row[Notes.title],
         description = row[Notes.description]
     )
